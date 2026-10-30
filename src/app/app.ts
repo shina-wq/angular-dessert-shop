@@ -13,4 +13,28 @@ import { CartItem, Product } from './models/product';
 export class App {
   products: Product[] = PRODUCTS;
   cart: CartItem[] = [];
+
+  addToCart(product: Product): void {
+    this.cart = [...this.cart, { product, quantity: 1 }];
+  }
+
+  increment(product: Product): void {
+    this.cart = this.cart.map((item) =>
+      item.product === product ? { ...item, quantity: item.quantity + 1 } : item,
+    );
+  }
+
+  decrement(product: Product): void {
+    this.cart = this.cart
+      .map((item) => (item.product === product ? { ...item, quantity: item.quantity - 1 } : item))
+      .filter((item) => item.quantity > 0);
+  }
+
+  removeFromCart(product: Product): void {
+    this.cart = this.cart.filter((item) => item.product !== product);
+  }
+
+  clearCart(): void {
+    this.cart = [];
+  }
 }

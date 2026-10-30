@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartItem, Product } from '../../models/product';
 import { ProductCard } from '../product-card/product-card';
 
@@ -11,6 +11,10 @@ import { ProductCard } from '../product-card/product-card';
 export class ProductList {
   @Input({ required: true }) products!: Product[];
   @Input({ required: true }) cart!: CartItem[];
+
+  @Output() add = new EventEmitter<Product>();
+  @Output() increment = new EventEmitter<Product>();
+  @Output() decrement = new EventEmitter<Product>();
 
   quantityOf(product: Product): number {
     return this.cart.find((item) => item.product === product)?.quantity ?? 0;

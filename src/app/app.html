@@ -1,4 +1,10 @@
 <main>
-  <app-product-list [products]="products" [cart]="cart" />
-  <app-cart [items]="cart" />
+  <app-product-list
+    [products]="products"
+    [cart]="cart"
+    (add)="addToCart($event)"
+    (increment)="increment($event)"
+    (decrement)="decrement($event)"
+  />
+  <app-cart [items]="cart" (remove)="removeFromCart($event)" (clear)="clearCart()" />
 </main>

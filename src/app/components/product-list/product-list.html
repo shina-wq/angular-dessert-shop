@@ -3,7 +3,13 @@
 
   <div class="grid">
     @for (product of products; track product.name) {
-      <app-product-card [product]="product" [quantity]="quantityOf(product)" />
+      <app-product-card
+        [product]="product"
+        [quantity]="quantityOf(product)"
+        (add)="add.emit(product)"
+        (increment)="increment.emit(product)"
+        (decrement)="decrement.emit(product)"
+      />
     } @empty {
       <p class="empty">No desserts available right now. Please check back later.</p>
     }
