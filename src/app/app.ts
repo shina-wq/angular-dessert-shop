@@ -14,6 +14,10 @@ export class App {
   products: Product[] = PRODUCTS;
   cart: CartItem[] = [];
 
+  get cartTotal(): number {
+    return this.cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }
+
   addToCart(product: Product): void {
     this.cart = [...this.cart, { product, quantity: 1 }];
   }

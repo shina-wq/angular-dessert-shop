@@ -6,5 +6,10 @@
     (increment)="increment($event)"
     (decrement)="decrement($event)"
   />
-  <app-cart [items]="cart" (remove)="removeFromCart($event)" (clear)="clearCart()" />
+  <app-cart
+    [items]="cart"
+    [total]="cartTotal"
+    (remove)="removeFromCart($event)"
+    (clear)="clearCart()"
+  />
 </main>

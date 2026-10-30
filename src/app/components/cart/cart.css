@@ -1,0 +1,135 @@
+.cart {
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+h2 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: var(--red);
+}
+
+.empty {
+  padding: 16px 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rose-500);
+}
+
+.empty img {
+  margin: 0 auto 16px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--rose-100);
+}
+
+.name {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.details {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.qty {
+  font-weight: 600;
+  color: var(--red);
+}
+
+.unit {
+  color: var(--rose-500);
+}
+
+.line-total {
+  font-weight: 600;
+  color: var(--rose-500);
+}
+
+.remove-btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--rose-400);
+  background: none;
+  border: 1px solid var(--rose-400);
+  border-radius: 50%;
+}
+
+.remove-btn:hover,
+.remove-btn:focus-visible {
+  color: var(--rose-900);
+  border-color: var(--rose-900);
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0;
+  font-size: 14px;
+}
+
+.total strong {
+  font-size: 24px;
+}
+
+.carbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  background: var(--rose-50);
+  border-radius: 8px;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--red);
+  border: none;
+  border-radius: 999px;
+}
+
+.confirm-btn:hover,
+.confirm-btn:focus-visible {
+  background: hsl(14, 86%, 32%);
+}
+
+.clear-btn {
+  display: block;
+  margin: 12px auto 0;
+  font-size: 14px;
+  color: var(--rose-500);
+  background: none;
+  border: none;
+  text-decoration: underline;
+}
+
+.clear-btn:hover,
+.clear-btn:focus-visible {
+  color: var(--red);
+}
