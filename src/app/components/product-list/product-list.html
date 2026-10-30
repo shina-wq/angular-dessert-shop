@@ -1,7 +1,11 @@
 <section>
   <h1>Desserts</h1>
 
-  @for (product of products; track product.name) {
-    <app-product-card [product]="product" />
-  }
+  <div class="grid">
+    @for (product of products; track product.name) {
+      <app-product-card [product]="product" [quantity]="quantityOf(product)" />
+    } @empty {
+      <p class="empty">No desserts available right now. Please check back later.</p>
+    }
+  </div>
 </section>

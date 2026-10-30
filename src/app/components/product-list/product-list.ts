@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Product } from '../../models/product';
+import { CartItem, Product } from '../../models/product';
 import { ProductCard } from '../product-card/product-card';
 
 @Component({
@@ -10,4 +10,9 @@ import { ProductCard } from '../product-card/product-card';
 })
 export class ProductList {
   @Input({ required: true }) products!: Product[];
+  @Input({ required: true }) cart!: CartItem[];
+
+  quantityOf(product: Product): number {
+    return this.cart.find((item) => item.product === product)?.quantity ?? 0;
+  }
 }

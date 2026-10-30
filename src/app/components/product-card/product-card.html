@@ -1,5 +1,32 @@
-<article>
-  <p>{{ product.category }}</p>
-  <h2>{{ product.name }}</h2>
-  <p>{{ product.price }}</p>
+<article class="card" [ngClass]="{ 'in-cart': quantity > 0 }">
+  <div class="media">
+    <picture>
+      <source media="(min-width: 1024px)" [srcset]="product.image.desktop" />
+      <source media="(min-width: 640px)" [srcset]="product.image.tablet" />
+      <img class="photo" [src]="product.image.mobile" [alt]="product.name" />
+    </picture>
+
+    @if (quantity === 0) {
+      <button class="add-btn" type="button" (click)="add.emit()">
+        <img src="assets/images/icon-add-to-cart.svg" alt="" />
+        Add to Cart
+      </button>
+    } @else {
+      <div class="stepper">
+        <button type="button" (click)="decrement.emit()" [attr.aria-label]="'Decrease ' + product.name">
+          <svg width="10" height="2" viewBox="0 0 10 2"><path fill="currentColor" d="M0 .375h10v1.25H0V.375Z" /></svg>
+        </button>
+        <span aria-live="polite">{{ quantity }}</span>
+        <button type="button" (click)="increment.emit()" [attr.aria-label]="'Increase ' + product.name">
+          <svg width="10" height="10" viewBox="0 0 10 10">
+            <path fill="currentColor" d="M10 4.375H5.625V0h-1.25v4.375H0v1.25h4.375V10h1.25V5.625H10v-1.25Z" />
+          </svg>
+        </button>
+      </div>
+    }
+  </div>
+
+  <p class="category">{{ product.category }}</p>
+  <h2 class="name">{{ product.name }}</h2>
+  <p class="price">{{ product.price | currency }}</p>
 </article>

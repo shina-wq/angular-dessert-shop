@@ -1,0 +1,15 @@
+h1 {
+  margin-bottom: 32px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 32px 24px;
+}
+
+.empty {
+  color: var(--rose-500);
+}
