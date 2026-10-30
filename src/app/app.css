@@ -1,0 +1,30 @@
+.toast-region {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 20;
+  transform: translateX(-50%);
+}
+
+.toast {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  background: var(--rose-900);
+  border-radius: 999px;
+  animation: toast-in 0.2s ease-out;
+}
+
+.toast::before {
+  content: '✓ ';
+  color: var(--green);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

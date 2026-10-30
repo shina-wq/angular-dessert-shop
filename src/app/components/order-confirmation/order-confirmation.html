@@ -1,3 +1,32 @@
-<div>
-  <h2>Order Confirmed</h2>
+<div class="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <img src="assets/images/icon-order-confirmed.svg" alt="" />
+    <h2 id="confirm-title">Order Confirmed</h2>
+    <p class="subtitle">We hope you enjoy your food!</p>
+
+    <div class="summary">
+      <ul>
+        @for (item of items; track item.product.name) {
+          <li>
+            <img class="thumb" [src]="item.product.image.thumbnail" [alt]="item.product.name" />
+            <div class="info">
+              <p class="name">{{ item.product.name }}</p>
+              <p class="details">
+                <span class="qty">{{ item.quantity }}x</span>
+                <span class="unit">&#64; {{ item.product.price | currency }}</span>
+              </p>
+            </div>
+            <span class="line-total">{{ item.product.price * item.quantity | currency }}</span>
+          </li>
+        }
+      </ul>
+
+      <div class="total">
+        <span>Order Total</span>
+        <strong>{{ total | currency }}</strong>
+      </div>
+    </div>
+
+    <button class="new-order-btn" type="button" (click)="newOrder.emit()">Start New Order</button>
+  </div>
 </div>

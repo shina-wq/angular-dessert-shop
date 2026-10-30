@@ -11,5 +11,16 @@
     [total]="cartTotal"
     (remove)="removeFromCart($event)"
     (clear)="clearCart()"
+    (confirm)="orderConfirmed = true"
   />
 </main>
+
+@if (orderConfirmed) {
+  <app-order-confirmation [items]="cart" [total]="cartTotal" (newOrder)="startNewOrder()" />
+}
+
+<div class="toast-region" role="status">
+  @if (toastMessage()) {
+    <p class="toast">{{ toastMessage() }}</p>
+  }
+</div>
