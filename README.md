@@ -2,7 +2,7 @@
 
 A responsive dessert shop built with Angular. Browse desserts, add them to your cart, adjust quantities and confirm your order.
 
-- **Live site:** _add your Vercel link here_
+- **Live site:** https://angular-dessert-shop.vercel.app/
 - **Repository:** https://github.com/shina-wq/angular-dessert-shop
 
 ## Features
