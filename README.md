@@ -1,59 +1,79 @@
-# AngularDessertShop
+# Dessert Shop
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
+A responsive dessert shop built with Angular. Browse desserts, add them to your cart, adjust quantities and confirm your order.
 
-## Development server
+- **Live site:** _add your Vercel link here_
+- **Repository:** https://github.com/shina-wq/angular-dessert-shop
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
+- Product list rendered from typed data, with responsive mobile / tablet / desktop images
+- Add to cart, then increase or decrease the quantity right on the product card
+- Products already in the cart are highlighted with a red border
+- Cart shows each item, line totals and the order total, and updates instantly
+- Remove single items or clear the whole cart
+- Order confirmation modal with a summary; "Start New Order" resets everything
+- "Added to cart" toast message
+- Prices formatted in Rwandan francs (`en-RW` locale, e.g. `RF9,500`)
+- Responsive layout from 320px phones to large desktops, with hover and keyboard focus states
+
+## Built with
+
+- [Angular 22](https://angular.dev) (standalone components)
+- TypeScript
+- Plain CSS with custom properties
+- Red Hat Text font
+
+## Angular concepts used
+
+| Concept | Where |
+| --- | --- |
+| Components | `ProductList`, `ProductCard`, `Cart`, `OrderConfirmation` in `src/app/components/` |
+| Interpolation | `{{ product.name }}`, `{{ item.quantity }}x` |
+| Property binding | `[src]`, `[srcset]`, `[product]`, `[items]`, `[attr.aria-label]` |
+| Event binding | `(click)`, `(add)`, `(remove)`, `(confirm)` |
+| Structural control flow | `@for` (with `@empty` for "no products"), `@if` for the empty cart, stepper and modal |
+| Attribute directive | `[ngClass]="{ 'in-cart': quantity > 0 }"` highlights products in the cart |
+| Pipes | `currency` with the Rwanda locale |
+| Parent → child | `@Input()` passes products, cart items and the total down |
+| Child → parent | `@Output()` + `EventEmitter` send add / increment / decrement / remove / clear / confirm up |
+| Shared state | The root `App` component owns the cart and all cart logic |
+
+> Angular 17+ replaced the `*ngFor` / `*ngIf` structural directives with the built-in `@for` / `@if` control flow, and the old directives are deprecated since Angular 20. This project uses the current syntax.
+
+## Project structure
+
+```
+src/app/
+├── app.ts / app.html            # Parent: owns products, cart, modal and toast state
+├── components/
+│   ├── product-list/            # Grid of products
+│   ├── product-card/            # One dessert with Add to Cart / quantity stepper
+│   ├── cart/                    # Cart items, total, Confirm Order
+│   └── order-confirmation/      # Confirmation modal
+├── data/products.ts             # Dessert data (prices in RWF)
+└── models/product.ts            # Product and CartItem interfaces
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting started
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Requires Node.js 18 or later.
 
 ```bash
-ng generate component component-name
+git clone https://github.com/shina-wq/angular-dessert-shop.git
+cd angular-dessert-shop
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Then open http://localhost:4200.
+
+To create a production build in `dist/angular-dessert-shop/browser`:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+## Design
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Based on the [Product list with cart](https://www.frontendmentor.io/challenges/product-list-with-cart-5MmqLVAp_d) challenge by Frontend Mentor.

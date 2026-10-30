@@ -1,5 +1,13 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CartItem } from '../../models/product';
 
 @Component({
@@ -8,9 +16,16 @@ import { CartItem } from '../../models/product';
   styleUrl: './order-confirmation.css',
   templateUrl: './order-confirmation.html',
 })
-export class OrderConfirmation {
+export class OrderConfirmation implements AfterViewInit {
   @Input({ required: true }) items!: CartItem[];
   @Input({ required: true }) total!: number;
 
   @Output() newOrder = new EventEmitter<void>();
+
+  @ViewChild('newOrderButton') newOrderButton!: ElementRef<HTMLButtonElement>;
+
+  // Move keyboard focus into the modal when it opens
+  ngAfterViewInit(): void {
+    this.newOrderButton.nativeElement.focus();
+  }
 }
