@@ -14,7 +14,7 @@ A responsive dessert shop built with Angular. Browse desserts, add them to your 
 - Remove single items or clear the whole cart
 - Order confirmation modal with a summary; "Start New Order" resets everything
 - "Added to cart" toast message
-- Prices formatted in Rwandan francs (`en-RW` locale, e.g. `RF9,500`)
+- Prices formatted as US dollars with Angular's `currency` pipe (e.g. `$6.50`)
 - Responsive layout from 320px phones to large desktops, with hover and keyboard focus states
 
 ## Built with
@@ -34,7 +34,7 @@ A responsive dessert shop built with Angular. Browse desserts, add them to your 
 | Event binding | `(click)`, `(add)`, `(remove)`, `(confirm)` |
 | Structural control flow | `@for` (with `@empty` for "no products"), `@if` for the empty cart, stepper and modal |
 | Attribute directive | `[ngClass]="{ 'in-cart': quantity > 0 }"` highlights products in the cart |
-| Pipes | `currency` with the Rwanda locale |
+| Pipes | `currency` formats prices as US dollars |
 | Parent → child | `@Input()` passes products, cart items and the total down |
 | Child → parent | `@Output()` + `EventEmitter` send add / increment / decrement / remove / clear / confirm up |
 | Shared state | The root `App` component owns the cart and all cart logic |
@@ -51,7 +51,7 @@ src/app/
 │   ├── product-card/            # One dessert with Add to Cart / quantity stepper
 │   ├── cart/                    # Cart items, total, Confirm Order
 │   └── order-confirmation/      # Confirmation modal
-├── data/products.ts             # Dessert data (prices in RWF)
+├── data/products.ts             # Dessert data (prices in USD)
 └── models/product.ts            # Product and CartItem interfaces
 ```
 

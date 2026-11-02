@@ -11,25 +11,25 @@ function images(slug: string): ProductImage {
   };
 }
 
-// Prices in Rwandan francs (RWF)
+// Prices in US dollars (USD)
 export const PRODUCTS: Product[] = [
-  { name: 'Waffle with Berries', category: 'Waffle', price: 9500, image: images('waffle') },
+  { name: 'Waffle with Berries', category: 'Waffle', price: 6.5, image: images('waffle') },
   {
     name: 'Vanilla Bean Crème Brûlée',
     category: 'Crème Brûlée',
-    price: 10000,
+    price: 7,
     image: images('creme-brulee'),
   },
-  { name: 'Macaron Mix of Five', category: 'Macaron', price: 11500, image: images('macaron') },
-  { name: 'Classic Tiramisu', category: 'Tiramisu', price: 8000, image: images('tiramisu') },
-  { name: 'Pistachio Baklava', category: 'Baklava', price: 6000, image: images('baklava') },
-  { name: 'Lemon Meringue Pie', category: 'Pie', price: 7500, image: images('meringue') },
-  { name: 'Red Velvet Cake', category: 'Cake', price: 6500, image: images('cake') },
-  { name: 'Salted Caramel Brownie', category: 'Brownie', price: 6500, image: images('brownie') },
+  { name: 'Macaron Mix of Five', category: 'Macaron', price: 8, image: images('macaron') },
+  { name: 'Classic Tiramisu', category: 'Tiramisu', price: 5.5, image: images('tiramisu') },
+  { name: 'Pistachio Baklava', category: 'Baklava', price: 4, image: images('baklava') },
+  { name: 'Lemon Meringue Pie', category: 'Pie', price: 5, image: images('meringue') },
+  { name: 'Red Velvet Cake', category: 'Cake', price: 4.5, image: images('cake') },
+  { name: 'Salted Caramel Brownie', category: 'Brownie', price: 4.5, image: images('brownie') },
   {
     name: 'Vanilla Panna Cotta',
     category: 'Panna Cotta',
-    price: 9500,
+    price: 6.5,
     image: images('panna-cotta'),
   },
 ];
