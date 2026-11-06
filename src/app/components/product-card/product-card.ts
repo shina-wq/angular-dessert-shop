@@ -1,15 +1,15 @@
-import { CurrencyPipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { Product } from '../../models/product';
 
 @Component({
-  imports: [NgClass, CurrencyPipe],
   selector: 'app-product-card',
-  styleUrl: './product-card.css',
+  imports: [NgClass, CurrencyPipe],
   templateUrl: './product-card.html',
+  styleUrl: './product-card.css',
 })
 export class ProductCard {
-  @Input({ required: true }) product!: Product;
+  @Input() product!: Product;
   @Input() quantity = 0;
 
   @Output() add = new EventEmitter<void>();

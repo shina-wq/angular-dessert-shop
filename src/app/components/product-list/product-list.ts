@@ -3,20 +3,22 @@ import { CartItem, Product } from '../../models/product';
 import { ProductCard } from '../product-card/product-card';
 
 @Component({
-  imports: [ProductCard],
   selector: 'app-product-list',
-  styleUrl: './product-list.css',
+  imports: [ProductCard],
   templateUrl: './product-list.html',
+  styleUrl: './product-list.css',
 })
 export class ProductList {
-  @Input({ required: true }) products!: Product[];
-  @Input({ required: true }) cart!: CartItem[];
+  @Input() products: Product[] = [];
+  @Input() cart: CartItem[] = [];
 
   @Output() add = new EventEmitter<Product>();
   @Output() increment = new EventEmitter<Product>();
   @Output() decrement = new EventEmitter<Product>();
 
+  // How many of this product are in the cart (0 if none)
   quantityOf(product: Product): number {
-    return this.cart.find((item) => item.product === product)?.quantity ?? 0;
+    const item = this.cart.find((i) => i.product === product);
+    return item ? item.quantity : 0;
   }
 }

@@ -1,22 +1,25 @@
-import { CurrencyPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { CartItem, Product } from '../../models/product';
 
 @Component({
-  imports: [CurrencyPipe],
   selector: 'app-cart',
-  styleUrl: './cart.css',
+  imports: [CurrencyPipe],
   templateUrl: './cart.html',
+  styleUrl: './cart.css',
 })
 export class Cart {
-  @Input({ required: true }) items!: CartItem[];
-  @Input({ required: true }) total!: number;
+  @Input() items: CartItem[] = [];
+  @Input() total = 0;
 
   @Output() remove = new EventEmitter<Product>();
-  @Output() clear = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
 
   get count(): number {
-    return this.items.reduce((sum, item) => sum + item.quantity, 0);
+    let count = 0;
+    for (const item of this.items) {
+      count += item.quantity;
+    }
+    return count;
   }
 }

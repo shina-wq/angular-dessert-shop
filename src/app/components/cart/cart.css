@@ -118,18 +118,3 @@ li {
 .confirm-btn:focus-visible {
   background: hsl(14, 86%, 32%);
 }
-
-.clear-btn {
-  display: block;
-  margin: 12px auto 0;
-  font-size: 14px;
-  color: var(--rose-500);
-  background: none;
-  border: none;
-  text-decoration: underline;
-}
-
-.clear-btn:hover,
-.clear-btn:focus-visible {
-  color: var(--red);
-}

@@ -25,36 +25,3 @@ main {
     top: 24px;
   }
 }
-
-.toast-region {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  z-index: 20;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: calc(100vw - 32px);
-}
-
-.toast {
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  color: #fff;
-  background: var(--rose-900);
-  border-radius: 999px;
-  animation: toast-in 0.2s ease-out;
-}
-
-.toast::before {
-  content: '✓ ';
-  color: var(--green);
-}
-
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
