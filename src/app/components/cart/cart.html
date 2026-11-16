@@ -8,7 +8,7 @@
     </div>
   } @else {
     <ul>
-      @for (item of cart.items(); track item.product.name) {
+      @for (item of cart.items(); track item.product.id) {
         <li>
           <div>
             <p class="name">{{ item.product.name }}</p>

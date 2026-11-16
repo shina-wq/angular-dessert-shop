@@ -7,7 +7,7 @@ import { UtilService } from './util.service';
 
 /** What gets written to storage: just enough to rebuild the cart. */
 interface SavedCartItem {
-  name: string;
+  id: number;
   quantity: number;
 }
 
@@ -53,7 +53,7 @@ export class CartService {
       }
 
       const saved: SavedCartItem[] = items.map((item) => ({
-        name: item.product.name,
+        id: item.product.id,
         quantity: item.quantity,
       }));
       this.storage.set(this.storageKey, saved);
@@ -117,7 +117,7 @@ export class CartService {
   }
 
   /**
-   * Rebuilds the cart from storage. Only names and quantities are saved, so
+   * Rebuilds the cart from storage. Only ids and quantities are saved, so
    * each product is looked up in the current catalogue: prices stay up to
    * date, and anything no longer sold (or malformed) is skipped.
    */
@@ -129,7 +129,7 @@ export class CartService {
     const items: CartItem[] = [];
 
     for (const entry of saved) {
-      const product = catalogue.find((p) => p.name === entry?.name);
+      const product = catalogue.find((p) => p.id === entry?.id);
       const quantity = entry?.quantity;
 
       if (product && Number.isInteger(quantity) && quantity > 0) {
@@ -147,9 +147,10 @@ export class CartService {
     return this._items().find((item) => this.matches(item, product));
   }
 
-  // Match by name rather than object reference, so a cart restored from
+  // Match by id rather than object reference, so a cart restored from
   // storage (a copy of the products) still matches the product list.
+  // Names aren't used because two products could share one.
   private matches(item: CartItem, product: Product): boolean {
-    return item.product.name === product.name;
+    return item.product.id === product.id;
   }
 }
