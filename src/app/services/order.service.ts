@@ -2,12 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { CartService } from './cart.service';
 import { LoggerService } from './logger.service';
 
-/**
- * Checkout flow: confirming an order and starting a new one.
- *
- * Built on top of CartService rather than duplicating it, which shows a
- * service depending on other services through DI.
- */
+// Checkout flow: confirming an order and starting a new one.
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private readonly cart = inject(CartService);
