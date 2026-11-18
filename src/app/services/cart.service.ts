@@ -5,32 +5,20 @@ import { ProductService } from './product.service';
 import { CART_STORAGE_KEY, StorageService } from './storage.service';
 import { UtilService } from './util.service';
 
-/** What gets written to storage: just enough to rebuild the cart. */
 interface SavedCartItem {
   id: number;
   quantity: number;
 }
 
-/**
- * Single source of truth for the shopping cart.
- *
- * `providedIn: 'root'` makes this a singleton: every component that injects
- * CartService gets the same instance, so they all see the same cart.
- */
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  // Services can inject other services, just like components can.
   private readonly util = inject(UtilService);
   private readonly logger = inject(LoggerService);
   private readonly products = inject(ProductService);
   private readonly storage = inject(StorageService);
   private readonly storageKey = inject(CART_STORAGE_KEY);
-
-  // Private and writable: only this service can change the cart.
-  // Starts with whatever was saved on the last visit.
   private readonly _items = signal<CartItem[]>(this.restore());
 
-  // Public and read-only: components can read the cart but not modify it directly.
   readonly items = this._items.asReadonly();
 
   readonly count = computed(() => this.util.sum(this._items(), (item) => item.quantity));
@@ -42,8 +30,6 @@ export class CartService {
   readonly isEmpty = computed(() => this._items().length === 0);
 
   constructor() {
-    // Runs whenever the cart changes, so storage is always up to date.
-    // An empty cart removes the saved data instead of storing [].
     effect(() => {
       const items = this._items();
 
@@ -60,7 +46,6 @@ export class CartService {
     });
   }
 
-  /** How many of this product are in the cart (0 if none). */
   quantityOf(product: Product): number {
     return this.find(product)?.quantity ?? 0;
   }
@@ -116,11 +101,6 @@ export class CartService {
     this.logger.info(`${product.name} quantity is now ${quantity}`);
   }
 
-  /**
-   * Rebuilds the cart from storage. Only ids and quantities are saved, so
-   * each product is looked up in the current catalogue: prices stay up to
-   * date, and anything no longer sold (or malformed) is skipped.
-   */
   private restore(): CartItem[] {
     const saved = this.storage.get<unknown>(this.storageKey);
     if (!Array.isArray(saved)) return [];
@@ -147,9 +127,6 @@ export class CartService {
     return this._items().find((item) => this.matches(item, product));
   }
 
-  // Match by id rather than object reference, so a cart restored from
-  // storage (a copy of the products) still matches the product list.
-  // Names aren't used because two products could share one.
   private matches(item: CartItem, product: Product): boolean {
     return item.product.id === product.id;
   }
