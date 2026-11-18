@@ -17,6 +17,7 @@ export class CartService {
   private readonly products = inject(ProductService);
   private readonly storage = inject(StorageService);
   private readonly storageKey = inject(CART_STORAGE_KEY);
+  
   private readonly _items = signal<CartItem[]>(this.restore());
 
   readonly items = this._items.asReadonly();
