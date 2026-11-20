@@ -48,9 +48,7 @@ export class CartService {
 
     // Save every change. skip(1) ignores the value the BehaviorSubject replays
     // on subscribe, which is the cart we just restored.
-    this.items$
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe((items) => this.save(items));
+    this.items$.pipe(skip(1), takeUntilDestroyed()).subscribe((items) => this.save(items));
   }
 
   /** The cart right now, for one-off checks such as confirming an order. */
