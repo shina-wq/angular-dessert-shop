@@ -5,18 +5,18 @@
   </header>
 
   <div class="grid">
-    @for (product of results().products; track product.id) {
+    @for (card of view().cards; track card.product.id) {
       <app-product-card
-        [product]="product"
-        [quantity]="quantityOf(product)"
-        (add)="cart.add(product)"
-        (increment)="cart.increment(product)"
-        (decrement)="cart.decrement(product)"
+        [product]="card.product"
+        [quantity]="card.quantity"
+        (add)="cart.add(card.product)"
+        (increment)="cart.increment(card.product)"
+        (decrement)="cart.decrement(card.product)"
       />
     } @empty {
       <p class="empty" role="status">
-        @if (results().term) {
-          No desserts match “{{ results().term }}”. Try another name or category.
+        @if (view().term) {
+          No desserts match “{{ view().term }}”. Try another name or category.
         } @else {
           No desserts available right now. Please check back later.
         }

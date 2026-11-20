@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Subject,
+  combineLatest,
   debounceTime,
   distinctUntilChanged,
   map,
@@ -9,7 +10,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { Product } from '../../models/product';
 import { CartService } from '../../services/cart.service';
 import { LoggerService } from '../../services/logger.service';
 import { ProductService } from '../../services/product.service';
@@ -46,10 +46,20 @@ export class ProductList {
     ),
   );
 
-  protected readonly results = toSignal(this.results$, { requireSync: true });
-  private readonly cartItems = toSignal(this.cart.items$, { requireSync: true });
+  /**
+   * Search results joined with the cart: combineLatest re-emits whenever
+   * either side changes, so a new search or a cart update both refresh the
+   * quantity shown on each card.
+   */
+  private readonly view$ = combineLatest([this.results$, this.cart.items$]).pipe(
+    map(([{ term, products }, items]) => {
+      const quantities = new Map(items.map((item) => [item.product.id, item.quantity]));
+      return {
+        term,
+        cards: products.map((product) => ({ product, quantity: quantities.get(product.id) ?? 0 })),
+      };
+    }),
+  );
 
-  protected quantityOf(product: Product): number {
-    return this.cartItems().find((item) => item.product.id === product.id)?.quantity ?? 0;
-  }
+  protected readonly view = toSignal(this.view$, { requireSync: true });
 }
