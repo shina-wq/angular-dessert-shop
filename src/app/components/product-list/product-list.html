@@ -2,10 +2,10 @@
   <h1>Desserts</h1>
 
   <div class="grid">
-    @for (product of products; track product.id) {
+    @for (product of products(); track product.id) {
       <app-product-card
         [product]="product"
-        [quantity]="cart.quantityOf(product)"
+        [quantity]="quantityOf(product)"
         (add)="cart.add(product)"
         (increment)="cart.increment(product)"
         (decrement)="cart.decrement(product)"

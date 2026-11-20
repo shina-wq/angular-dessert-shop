@@ -19,6 +19,16 @@ export class UtilService {
     return Math.round(amount * 100) / 100;
   }
 
+  /** Total number of units across all cart lines. */
+  itemCount(items: readonly CartItem[]): number {
+    return this.sum(items, (item) => item.quantity);
+  }
+
+  /** Sum of every cart line, rounded to cents. */
+  orderTotal(items: readonly CartItem[]): number {
+    return this.roundToCents(this.sum(items, (item) => this.lineTotal(item)));
+  }
+
   /** Price of one cart line: unit price × quantity. */
   lineTotal(item: CartItem): number {
     return this.roundToCents(item.product.price * item.quantity);

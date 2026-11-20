@@ -1,14 +1,14 @@
 <aside class="cart">
-  <h2>Your Cart ({{ cart.count() }})</h2>
+  <h2>Your Cart ({{ count() }})</h2>
 
-  @if (cart.isEmpty()) {
+  @if (isEmpty()) {
     <div class="empty">
       <img src="assets/images/illustration-empty-cart.svg" alt="" />
       <p>Your added items will appear here</p>
     </div>
   } @else {
     <ul>
-      @for (item of cart.items(); track item.product.id) {
+      @for (item of items(); track item.product.id) {
         <li>
           <div>
             <p class="name">{{ item.product.name }}</p>
@@ -37,7 +37,7 @@
 
     <div class="total">
       <span>Order Total</span>
-      <strong>{{ cart.total() | currency }}</strong>
+      <strong>{{ total() | currency }}</strong>
     </div>
 
     <p class="carbon">

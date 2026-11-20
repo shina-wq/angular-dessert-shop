@@ -1,4 +1,5 @@
 import { Injectable, InjectionToken, inject } from '@angular/core';
+import { Observable, catchError, defer, of } from 'rxjs';
 import { LoggerService } from './logger.service';
 
 /** The localStorage key the cart is saved under. Provided in app.config.ts. */
@@ -15,15 +16,21 @@ export const CART_STORAGE_KEY = new InjectionToken<string>('CART_STORAGE_KEY');
 export class StorageService {
   private readonly logger = inject(LoggerService);
 
-  /** The parsed value, or null if it's missing or unreadable. */
-  get<T>(key: string): T | null {
-    try {
+  /**
+   * Emits the parsed value, or null if it's missing or unreadable, then completes.
+   * `defer` runs the read when someone subscribes, so a throw from localStorage
+   * or JSON.parse becomes a stream error that `catchError` turns into null.
+   */
+  read<T>(key: string): Observable<T | null> {
+    return defer(() => {
       const raw = localStorage.getItem(key);
-      return raw === null ? null : (JSON.parse(raw) as T);
-    } catch (error) {
-      this.logger.warn(`Could not read "${key}" from storage`, error);
-      return null;
-    }
+      return of(raw === null ? null : (JSON.parse(raw) as T));
+    }).pipe(
+      catchError((error) => {
+        this.logger.warn(`Could not read "${key}" from storage`, error);
+        return of(null);
+      }),
+    );
   }
 
   set(key: string, value: unknown): void {

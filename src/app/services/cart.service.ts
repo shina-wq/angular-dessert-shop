@@ -1,4 +1,6 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, distinctUntilChanged, forkJoin, map, skip } from 'rxjs';
 import { CartItem, Product } from '../models/product';
 import { LoggerService } from './logger.service';
 import { ProductService } from './product.service';
@@ -17,38 +19,43 @@ export class CartService {
   private readonly products = inject(ProductService);
   private readonly storage = inject(StorageService);
   private readonly storageKey = inject(CART_STORAGE_KEY);
-  
-  private readonly _items = signal<CartItem[]>(this.restore());
 
-  readonly items = this._items.asReadonly();
+  /**
+   * The single source of truth for the cart. A BehaviorSubject always holds
+   * the latest value, so every new subscriber gets the current cart at once.
+   */
+  private readonly itemsSubject = new BehaviorSubject<readonly CartItem[]>([]);
 
-  readonly count = computed(() => this.util.sum(this._items(), (item) => item.quantity));
+  readonly items$ = this.itemsSubject.asObservable();
 
-  readonly total = computed(() =>
-    this.util.roundToCents(this.util.sum(this._items(), (item) => this.util.lineTotal(item))),
+  readonly count$ = this.items$.pipe(
+    map((items) => this.util.itemCount(items)),
+    distinctUntilChanged(),
   );
 
-  readonly isEmpty = computed(() => this._items().length === 0);
+  readonly total$ = this.items$.pipe(
+    map((items) => this.util.orderTotal(items)),
+    distinctUntilChanged(),
+  );
+
+  readonly isEmpty$ = this.items$.pipe(
+    map((items) => items.length === 0),
+    distinctUntilChanged(),
+  );
 
   constructor() {
-    effect(() => {
-      const items = this._items();
+    this.restore();
 
-      if (items.length === 0) {
-        this.storage.remove(this.storageKey);
-        return;
-      }
-
-      const saved: SavedCartItem[] = items.map((item) => ({
-        id: item.product.id,
-        quantity: item.quantity,
-      }));
-      this.storage.set(this.storageKey, saved);
-    });
+    // Save every change. skip(1) ignores the value the BehaviorSubject replays
+    // on subscribe, which is the cart we just restored.
+    this.items$
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((items) => this.save(items));
   }
 
-  quantityOf(product: Product): number {
-    return this.find(product)?.quantity ?? 0;
+  /** The cart right now, for one-off checks such as confirming an order. */
+  get currentItems(): readonly CartItem[] {
+    return this.itemsSubject.value;
   }
 
   add(product: Product): void {
@@ -56,7 +63,7 @@ export class CartService {
       this.increment(product);
       return;
     }
-    this._items.update((items) => [...items, { product, quantity: 1 }]);
+    this.itemsSubject.next([...this.currentItems, { product, quantity: 1 }]);
     this.logger.info(`Added ${product.name} to cart`);
   }
 
@@ -73,12 +80,12 @@ export class CartService {
       this.logger.warn(`Tried to remove ${product.name}, which is not in the cart`);
       return;
     }
-    this._items.update((items) => items.filter((item) => !this.matches(item, product)));
+    this.itemsSubject.next(this.currentItems.filter((item) => !this.matches(item, product)));
     this.logger.info(`Removed ${product.name} from cart`);
   }
 
   clear(): void {
-    this._items.set([]);
+    this.itemsSubject.next([]);
     this.logger.info('Cart cleared');
   }
 
@@ -96,17 +103,45 @@ export class CartService {
       return;
     }
 
-    this._items.update((items) =>
-      items.map((item) => (this.matches(item, product) ? { ...item, quantity } : item)),
+    this.itemsSubject.next(
+      this.currentItems.map((item) => (this.matches(item, product) ? { ...item, quantity } : item)),
     );
     this.logger.info(`${product.name} quantity is now ${quantity}`);
   }
 
-  private restore(): CartItem[] {
-    const saved = this.storage.get<unknown>(this.storageKey);
+  /**
+   * Loads the cart saved on the last visit. forkJoin waits for the catalogue
+   * and the saved entries, then emits once and completes, so this subscription
+   * cleans itself up.
+   */
+  private restore(): void {
+    forkJoin([this.products.products$, this.storage.read<unknown>(this.storageKey)])
+      .pipe(map(([catalogue, saved]) => this.toCartItems(saved, catalogue)))
+      .subscribe((items) => {
+        if (items.length > 0) {
+          this.logger.info(`Restored ${items.length} cart item(s) from your last visit`);
+        }
+        this.itemsSubject.next(items);
+      });
+  }
+
+  private save(items: readonly CartItem[]): void {
+    if (items.length === 0) {
+      this.storage.remove(this.storageKey);
+      return;
+    }
+
+    const saved: SavedCartItem[] = items.map((item) => ({
+      id: item.product.id,
+      quantity: item.quantity,
+    }));
+    this.storage.set(this.storageKey, saved);
+  }
+
+  /** Keeps only saved entries that still match a product and have a valid quantity. */
+  private toCartItems(saved: unknown, catalogue: readonly Product[]): CartItem[] {
     if (!Array.isArray(saved)) return [];
 
-    const catalogue = this.products.getAll();
     const items: CartItem[] = [];
 
     for (const entry of saved) {
@@ -117,15 +152,11 @@ export class CartService {
         items.push({ product, quantity });
       }
     }
-
-    if (items.length > 0) {
-      this.logger.info(`Restored ${items.length} cart item(s) from your last visit`);
-    }
     return items;
   }
 
   private find(product: Product): CartItem | undefined {
-    return this._items().find((item) => this.matches(item, product));
+    return this.currentItems.find((item) => this.matches(item, product));
   }
 
   private matches(item: CartItem, product: Product): boolean {
