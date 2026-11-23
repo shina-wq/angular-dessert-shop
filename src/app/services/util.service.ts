@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { CartItem } from '../models/product';
 
 /**
@@ -7,7 +7,7 @@ import { CartItem } from '../models/product';
  * Every method is pure (same input, same output, no side effects), so the
  * service holds no state and is safe to use anywhere.
  */
-@Injectable({ providedIn: 'root' })
+@Service()
 export class UtilService {
   /** Adds up one number from each item, e.g. sum(items, (i) => i.quantity). */
   sum<T>(items: readonly T[], value: (item: T) => number): number {

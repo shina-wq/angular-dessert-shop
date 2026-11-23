@@ -1,9 +1,9 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Service, inject, signal } from '@angular/core';
 import { CartService } from './cart.service';
 import { LoggerService } from './logger.service';
 
 // Checkout flow: confirming an order and starting a new one.
-@Injectable({ providedIn: 'root' })
+@Service()
 export class OrderService {
   private readonly cart = inject(CartService);
   private readonly logger = inject(LoggerService);

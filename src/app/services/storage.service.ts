@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, inject } from '@angular/core';
+import { Service, InjectionToken, inject } from '@angular/core';
 import { LoggerService } from './logger.service';
 
 /** The localStorage key the cart is saved under. Provided in app.config.ts. */
@@ -11,7 +11,7 @@ export const CART_STORAGE_KEY = new InjectionToken<string>('CART_STORAGE_KEY');
  * settings) and can hold invalid JSON, so every call is guarded. A storage
  * problem is logged and the app keeps working, just without persistence.
  */
-@Injectable({ providedIn: 'root' })
+@Service()
 export class StorageService {
   private readonly logger = inject(LoggerService);
 
