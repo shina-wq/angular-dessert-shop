@@ -27,15 +27,13 @@ export class ProductList {
   private readonly productService = inject(ProductService);
   private readonly logger = inject(LoggerService);
 
-  /** Every keystroke from the search box. */
   protected readonly searchTerms = new Subject<string>();
 
   private readonly results$ = this.searchTerms.pipe(
-    debounceTime(300), // wait until typing pauses
+    debounceTime(500),
     map((term) => term.trim().toLowerCase()),
-    startWith(''), // show everything before the first search
-    distinctUntilChanged(), // "cake" → "cake " → "cake" searches only once
-    // A new term replaces the previous search, so stale results never arrive late.
+    startWith(''),
+    distinctUntilChanged(),
     switchMap((term) =>
       this.productService.search(term).pipe(
         map((products) => ({ term, products })),
@@ -46,11 +44,6 @@ export class ProductList {
     ),
   );
 
-  /**
-   * Search results joined with the cart: combineLatest re-emits whenever
-   * either side changes, so a new search or a cart update both refresh the
-   * quantity shown on each card.
-   */
   private readonly view$ = combineLatest([this.results$, this.cart.items$]).pipe(
     map(([{ term, products }, items]) => {
       const quantities = new Map(items.map((item) => [item.product.id, item.quantity]));
