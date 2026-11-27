@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Cart } from './components/cart/cart';
 import { OrderConfirmation } from './components/order-confirmation/order-confirmation';
 import { ProductList } from './components/product-list/product-list';
@@ -11,5 +12,5 @@ import { OrderService } from './services/order.service';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly order = inject(OrderService);
+  protected readonly confirmed = toSignal(inject(OrderService).confirmed$, { requireSync: true });
 }

@@ -45,3 +45,6 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# Working plan (local only)
+plan.md

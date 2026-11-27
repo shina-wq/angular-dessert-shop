@@ -1,17 +1,26 @@
 <section>
-  <h1>Desserts</h1>
+  <header class="header">
+    <h1>Desserts</h1>
+    <app-product-search (termChange)="searchTerms.next($event)" />
+  </header>
 
   <div class="grid">
-    @for (product of products; track product.id) {
+    @for (card of view().cards; track card.product.id) {
       <app-product-card
-        [product]="product"
-        [quantity]="cart.quantityOf(product)"
-        (add)="cart.add(product)"
-        (increment)="cart.increment(product)"
-        (decrement)="cart.decrement(product)"
+        [product]="card.product"
+        [quantity]="card.quantity"
+        (add)="cart.add(card.product)"
+        (increment)="cart.increment(card.product)"
+        (decrement)="cart.decrement(card.product)"
       />
     } @empty {
-      <p class="empty">No desserts available right now. Please check back later.</p>
+      <p class="empty" role="status">
+        @if (view().term) {
+          No desserts match “{{ view().term }}”. Try another name or category.
+        } @else {
+          No desserts available right now. Please check back later.
+        }
+      </p>
     }
   </div>
 </section>

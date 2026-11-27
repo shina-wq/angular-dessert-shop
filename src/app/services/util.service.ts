@@ -1,4 +1,4 @@
-import { Service } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CartItem } from '../models/product';
 
 /**
@@ -7,7 +7,7 @@ import { CartItem } from '../models/product';
  * Every method is pure (same input, same output, no side effects), so the
  * service holds no state and is safe to use anywhere.
  */
-@Service()
+@Injectable({ providedIn: 'root' })
 export class UtilService {
   /** Adds up one number from each item, e.g. sum(items, (i) => i.quantity). */
   sum<T>(items: readonly T[], value: (item: T) => number): number {
@@ -17,6 +17,16 @@ export class UtilService {
   /** Rounds to whole cents, avoiding floating-point drift such as 0.1 + 0.2 = 0.30000000000000004. */
   roundToCents(amount: number): number {
     return Math.round(amount * 100) / 100;
+  }
+
+  /** Total number of units across all cart lines. */
+  itemCount(items: readonly CartItem[]): number {
+    return this.sum(items, (item) => item.quantity);
+  }
+
+  /** Sum of every cart line, rounded to cents. */
+  orderTotal(items: readonly CartItem[]): number {
+    return this.roundToCents(this.sum(items, (item) => this.lineTotal(item)));
   }
 
   /** Price of one cart line: unit price × quantity. */

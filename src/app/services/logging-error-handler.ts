@@ -1,4 +1,4 @@
-import { ErrorHandler, Service, inject } from '@angular/core';
+import { ErrorHandler, Injectable, inject } from '@angular/core';
 import { LoggerService } from './logger.service';
 
 /**
@@ -6,7 +6,7 @@ import { LoggerService } from './logger.service';
  * uncaught error is recorded by the LoggerService instead of only going to
  * the console.
  */
-@Service({ autoProvided: false })
+@Injectable()
 export class LoggingErrorHandler implements ErrorHandler {
   private readonly logger = inject(LoggerService);
 
