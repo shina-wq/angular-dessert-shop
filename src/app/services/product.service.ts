@@ -1,8 +1,8 @@
-import { Service } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { PRODUCTS } from '../data/products';
 import { Product } from '../models/product';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class ProductService {
   private readonly products: readonly Product[] = PRODUCTS;
 

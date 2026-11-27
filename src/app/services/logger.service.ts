@@ -1,4 +1,4 @@
-import { Service, isDevMode, signal } from '@angular/core';
+import { Injectable, isDevMode, signal } from '@angular/core';
 
 export type LogLevel = 'info' | 'warn' | 'error';
 
@@ -16,7 +16,7 @@ export interface LogEntry {
  * shown in the UI. Info and warnings are also printed to the console during
  * development only; errors are always printed.
  */
-@Service()
+@Injectable({ providedIn: 'root' })
 export class LoggerService {
   private static readonly MAX_ENTRIES = 100;
 

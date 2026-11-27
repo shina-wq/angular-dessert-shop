@@ -1,4 +1,4 @@
-import { Service, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { CartItem, Product } from '../models/product';
 import { LoggerService } from './logger.service';
 import { ProductService } from './product.service';
@@ -10,7 +10,7 @@ interface SavedCartItem {
   quantity: number;
 }
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly util = inject(UtilService);
   private readonly logger = inject(LoggerService);
