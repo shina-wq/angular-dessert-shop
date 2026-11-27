@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CartItem, Product } from '../../models/product';
+import { Component, inject } from '@angular/core';
+import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
 import { ProductCard } from '../product-card/product-card';
 
 @Component({
@@ -9,16 +10,6 @@ import { ProductCard } from '../product-card/product-card';
   styleUrl: './product-list.css',
 })
 export class ProductList {
-  @Input() products: Product[] = [];
-  @Input() cart: CartItem[] = [];
-
-  @Output() add = new EventEmitter<Product>();
-  @Output() increment = new EventEmitter<Product>();
-  @Output() decrement = new EventEmitter<Product>();
-
-  // How many of this product are in the cart (0 if none)
-  quantityOf(product: Product): number {
-    const item = this.cart.find((i) => i.product === product);
-    return item ? item.quantity : 0;
-  }
+  protected readonly cart = inject(CartService);
+  protected readonly products = inject(ProductService).getAll();
 }

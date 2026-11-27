@@ -6,7 +6,7 @@
 
     <div class="summary">
       <ul>
-        @for (item of items; track item.product.name) {
+        @for (item of cart.items(); track item.product.id) {
           <li>
             <img class="thumb" [src]="item.product.image.thumbnail" [alt]="item.product.name" />
             <div class="info">
@@ -16,17 +16,17 @@
                 <span class="unit">&#64; {{ item.product.price | currency }}</span>
               </p>
             </div>
-            <span class="line-total">{{ item.product.price * item.quantity | currency }}</span>
+            <span class="line-total">{{ util.lineTotal(item) | currency }}</span>
           </li>
         }
       </ul>
 
       <div class="total">
         <span>Order Total</span>
-        <strong>{{ total | currency }}</strong>
+        <strong>{{ cart.total() | currency }}</strong>
       </div>
     </div>
 
-    <button class="new-order-btn" type="button" (click)="newOrder.emit()">Start New Order</button>
+    <button class="new-order-btn" type="button" (click)="order.startNew()">Start New Order</button>
   </div>
 </div>

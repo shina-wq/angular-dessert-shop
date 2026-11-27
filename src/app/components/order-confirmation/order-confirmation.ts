@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { CartItem } from '../../models/product';
+import { CartService } from '../../services/cart.service';
+import { OrderService } from '../../services/order.service';
+import { UtilService } from '../../services/util.service';
 
 @Component({
   selector: 'app-order-confirmation',
@@ -9,8 +11,7 @@ import { CartItem } from '../../models/product';
   styleUrl: './order-confirmation.css',
 })
 export class OrderConfirmation {
-  @Input() items: CartItem[] = [];
-  @Input() total = 0;
-
-  @Output() newOrder = new EventEmitter<void>();
+  protected readonly cart = inject(CartService);
+  protected readonly order = inject(OrderService);
+  protected readonly util = inject(UtilService);
 }

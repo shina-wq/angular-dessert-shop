@@ -1,27 +1,27 @@
 <aside class="cart">
-  <h2>Your Cart ({{ count }})</h2>
+  <h2>Your Cart ({{ cart.count() }})</h2>
 
-  @if (items.length === 0) {
+  @if (cart.isEmpty()) {
     <div class="empty">
       <img src="assets/images/illustration-empty-cart.svg" alt="" />
       <p>Your added items will appear here</p>
     </div>
   } @else {
     <ul>
-      @for (item of items; track item.product.name) {
+      @for (item of cart.items(); track item.product.id) {
         <li>
           <div>
             <p class="name">{{ item.product.name }}</p>
             <p class="details">
               <span class="qty">{{ item.quantity }}x</span>
               <span class="unit">&#64; {{ item.product.price | currency }}</span>
-              <span class="line-total">{{ item.product.price * item.quantity | currency }}</span>
+              <span class="line-total">{{ util.lineTotal(item) | currency }}</span>
             </p>
           </div>
           <button
             class="remove-btn"
             type="button"
-            (click)="remove.emit(item.product)"
+            (click)="cart.remove(item.product)"
             [attr.aria-label]="'Remove ' + item.product.name"
           >
             <svg width="10" height="10" viewBox="0 0 10 10">
@@ -37,7 +37,7 @@
 
     <div class="total">
       <span>Order Total</span>
-      <strong>{{ total | currency }}</strong>
+      <strong>{{ cart.total() | currency }}</strong>
     </div>
 
     <p class="carbon">
@@ -45,6 +45,6 @@
       <span>This is a <strong>carbon-neutral</strong> delivery</span>
     </p>
 
-    <button class="confirm-btn" type="button" (click)="confirm.emit()">Confirm Order</button>
+    <button class="confirm-btn" type="button" (click)="order.confirm()">Confirm Order</button>
   }
 </aside>
